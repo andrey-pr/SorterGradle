@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 @RunWith(Parameterized.class)
 public class SorterTest {
 
-    private Sorter subject;
+    private final Sorter subject;
 
     public SorterTest(Sorter subject) {
         this.subject = subject;
