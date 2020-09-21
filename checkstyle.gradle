@@ -1,0 +1,46 @@
+allprojects {
+    afterEvaluate { project ->
+        project.plugins.withId('checkstyle') {
+            try {
+                def _toolVersion = ext.has('toolVersion') ? ext['toolVersion'] : '8.15'
+                if (System.getenv('BUILD_ENVIRONMENT') ?: 'DEVELOPER' == 'CI') {
+                    println "'checkstyle' plugin common config"
+                    println " |- use toolVersion version: $_toolVersion"
+                    checkstyle {
+                        toolVersion "$_toolVersion"
+
+                        configFile = file("checkstyle.xml")
+                        println " |- use checkstyle.xml: " + configFile
+                        println ''
+                        reportsDir = file("${buildDir}/checkstyleReports")
+                    }
+                    checkstyleMain {
+                        source ='src/main/java'
+                    }
+                    checkstyleTest {
+                        source ='src/test/java'
+                    }
+                } else {
+                    println "'checkstyle' plugin common config"
+                    println " |- use toolVersion version: $_toolVersion"
+                    checkstyle {
+                        toolVersion "$_toolVersion"
+
+                        configFile = file("checkstyle.xml")
+                        println " |- use checkstyle.xml: " + configFile
+                        println ''
+                        reportsDir = file("${project.buildDir}/checkstyleReports")
+                    }
+                    checkstyleMain {
+                        source ='src/main/java'
+                    }
+                    checkstyleTest {
+                        source ='src/test/java'
+                    }
+                }
+            } catch (UnknownPluginException) {
+                println UnknownPluginException
+            }
+        }
+    }
+}
